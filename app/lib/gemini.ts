@@ -16,7 +16,7 @@ import {
     responseMimeType: "text/plain",
   };
   
-  const chatHistory: Content[] = [];
+  let chatHistory: Content[] = [];
   
   export async function getAIResponse(message: string) {
     const userMessage: Content = {
@@ -33,9 +33,10 @@ import {
     const result = await chatSession.sendMessage(message);
   
     const aiMessage: Content = {
-      role: "ai",
+      role: "model",
       parts: [{ text: result.response.text() }],
     };
+    chatHistory = [{ role: "user", parts: userMessage.parts }];
     chatHistory.push(aiMessage);
   
     return result.response.text();
